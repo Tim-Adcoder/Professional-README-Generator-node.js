@@ -1,110 +1,120 @@
-// TODO: Include packages needed for this application
-const path = require("path")
-const generateMarkdown = require("./utils/generateMarkdown")
+//package
 const fs = require('fs');
+const util = require('util');
 const inquirer = require('inquirer');
-const Choice = require("inquirer/lib/objects/choice");
 
-// TODO: Create an array of questions for user input
-const questions = [
-    //what's the name for your project? (title of README)
+const writeFileAsync = util.promisify(fs.writeFile);
+
+
+//prompt questions
+const promptUser = () => {
+    return inquirer.prompt([
     {
         type: 'input',
         message: 'what is the name for your project?',
         name: 'fileName',
     },
-
-        //Please choose license 
- 
-    // License section with explaination
-
-    {
-        type: 'list',
-        message: 'Please choose license'
-        choice: [
-            new inquirer.Separator(),
-            "Apache v2.0",
-            new inquirer.Separator(),
-            "GNU General Public v3.0",
-            new inquirer.Separator(),
-            "MIT",
-        ],
-        name: 'License',
-    },
-
-    //Please descript your project (Description Session)
     {
         type: 'input',
         message: 'Briefly descript your project.',
-        name: 'Description',
+        name: 'description',
     },
-
-    //Installation instructions (Installation Session)
     {
         type: 'input',
-        message: 'What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.',
-        name: 'Installation',
+        message: 'What are the steps required to install your project?',
+        name: 'installation',
     },
-
-
-    //Usage information (Usage Session)
     {
         type: 'input',
-        message: 'Provide instructions and examples for use.',
-        name: 'Usage',
+        message: 'What technologies were used?',
+        name: 'usage',
     },
-
-
-    //contribution guidelines(Contributing)
     {
         type: 'input',
-        message: 'List your collaborators, if any, with links to their GitHub profiles.        If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.',
-        name: 'Contributing',
+        message: 'List your collaborators.',
+        name: 'contributing',
     },
-
-    //test instructions(Tests)
     {
         type: 'input',
-        message: 'Go the extra mile and write tests for your application. Then provide examples on how to run them here',
-        name: 'Tests',
+        message: 'write tests for your application. ',
+        name: 'tests',
     },
-
-
-
-    // Please enter your GitHub username.
-    // Please enter your email address.
-    // How to can people reach you?
     {
         type: 'input',
         message: 'What is your gitHub username?',
-        name: 'Questions',
+        name: 'gitHub',
     },
     {
         type: 'input',
         message: 'What is your email address?',
-        name: 'Questions',
+        name: 'email',
     },
-    //(Questions session) (a link to profile)
-];
+    {
+        type: 'list',
+        message: 'Please choose license type:',
+        choices: [
+            'Apache v2.0',
+            'GNU General Public v3.0',
+            'MIT',
+        ],
+        name: 'license',
+    },
+    ])
+};
 
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {
-    return fs.writeFileSync(path.join(process.cwd(), fileName), data);
-}
+// README file function
+// function writeToFile(fileName, data) {
+//     return fs.writeFileSync(path.join(process.cwd(), fileName), data);
+// }
 
 // create a Table of Contents that contain links to the corresponding sections
 
-// TODO: Create a function to initialize app
-function init() {
-    inquirer.promopt(questions).then((answers) => {
-        writeToFile(
-            "ReadMe.md",
-            generateMarkdown({
-                ...answers,
-            })
-        );
-    });
-}
+function generateMarkdown(answers)  {
+    return `
+    
+# Project: ${answers.fileName}
+---------------------------------------------------
+## Table of Contents 
+1. [FileName](#fileName)
+2. [License](#License)
+3. [Description](#Description)
+4. [Installation](#installation)
+5. [Contributing](#Contributing)
+6. [Tests](#tests)
+7. [GitHub](#GitHub)
+8. [Email](#Email)
+---------------------------------------------------
+## License:
+
+NOTICE: This application is covered by ${answers.license}.
+  
+## Description
+${answers.description}
+  
+## Installation:
+${answers.installation}
+  
+## Contributing
+${answers.contributing}
+  
+## Tests:
+${answers.tests}
+  
+## GitHub
+Find me on [GitHub] (http://github.com/${answers.gitHub})
+  
+## Email
+If you have any questions, I can be reached at [${answers.email}]
+  `};
+
+
+// initialize app
+ function init() {
+    promptUser()
+    .then((answers) => writeFileAsync(`${answers.fileName}.md`,generateMarkdown(answers)))
+    .then(() => console.log(`Good work! You have created a README file.`))
+    .catch((err) => console.error(err))
+};
 
 // Function call to initialize app
 init();

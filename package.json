@@ -1,7 +1,7 @@
 {
   "name": "static-site",
   "version": "1.0.0",
-  "description": "",
+  "description": "1. [Description](#Description)\r  2.  [Links](#Links)\r  3. [User Story](#User_Story)\r  4. [Technologies](#technologies)\r  5. [Installation](#installation)\r  6. [Collaboration](#collaboration)\r  7. [license](#license)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^6.3.1"
-  }
+    "inquirer": "^6.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tim-Adcoder/Professional-README-Generator-node.js.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Tim-Adcoder/Professional-README-Generator-node.js/issues"
+  },
+  "homepage": "https://github.com/Tim-Adcoder/Professional-README-Generator-node.js#readme"
 }
